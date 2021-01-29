@@ -221,6 +221,7 @@ public class WorkflowConverter {
         args.add("{{workflow.status}}");
         args.add(url);
         args.add("-v");
+        args.add("-k");
         container.setArgs(args);
 
         return container;
@@ -347,7 +348,7 @@ public class WorkflowConverter {
      * @return the sub path of the data volume to mount 
      */
     private String getOutputMountSubPath(String jobId){
-		return new File(coreConfig.getJobsTempFolder(), jobId).getAbsolutePath()
-				.replaceFirst(coreConfig.getStorageRootFolder() + "/", "");
+        return new File(coreConfig.getJobsTempFolder(), jobId).getAbsolutePath()
+                .replaceFirst(coreConfig.getStorageRootFolder() + "/", "");
     }
 }

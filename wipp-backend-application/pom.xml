@@ -4,7 +4,7 @@
 	<groupId>gov.nist.itl.ssd.wipp</groupId>
 	<artifactId>wipp-backend-application</artifactId>
 	<name>wipp-backend-app</name>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.1</version>
 
 	<packaging>war</packaging>
 
@@ -116,7 +116,6 @@
 				<ome.converter.threads>6</ome.converter.threads>
 			</properties>
 		</profile>
-
 	</profiles>
 
 	<dependencies>
@@ -129,6 +128,22 @@
 			<groupId>gov.nist.itl.ssd.wipp</groupId>
 			<artifactId>wipp-backend-argo-workflows</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>           
+		</dependency>
+		<dependency>
+		    <groupId>de.flapdoodle.embed</groupId>
+		    <artifactId>de.flapdoodle.embed.mongo</artifactId>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	

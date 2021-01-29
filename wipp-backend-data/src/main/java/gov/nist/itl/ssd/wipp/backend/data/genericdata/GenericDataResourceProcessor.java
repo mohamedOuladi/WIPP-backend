@@ -40,6 +40,7 @@ public class GenericDataResourceProcessor implements RepresentationModelProcesso
 		
         Link downloadLink = linkTo(GenericDataDownloadController.class,
         		genericData.getId())
+        		.slash("request")
                 .withRel("download");
         resource.add(downloadLink);
         

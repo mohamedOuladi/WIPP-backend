@@ -13,25 +13,47 @@ package gov.nist.itl.ssd.wipp.backend.data.genericdata;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.core.annotation.RestResource;
+
+import gov.nist.itl.ssd.wipp.backend.core.model.auth.PrincipalFilteredRepository;
 
 /**
  *
  * @author Mohamed Ouladi <mohamed.ouladi at nist.gov>
  */
 @RepositoryRestResource
-public interface GenericDataRepository 
-		extends MongoRepository<GenericData, String>, 
-		GenericDataRepositoryCustom{
 
-	Page<GenericData> findByName(@Param("name") String name, Pageable p);
+public interface GenericDataRepository extends PrincipalFilteredRepository<GenericData, String>, GenericDataRepositoryCustom{
 
-	Page<GenericData> findByNameContainingIgnoreCase(
-			@Param("name") String name, Pageable p);
+	/*
+	 * Filter collection resources access by object name depending on user
+	 */
+	@Query(" { '$and' : ["
+			+ "{'$or':["
+			+ "{'owner': ?#{ hasRole('admin') ? {$exists:true} : (hasRole('ANONYMOUS') ? '':principal.name)}},"
+			+ "{'publiclyShared':true}"
+			+ "]} , "
+			+ "{'name' : {$eq : ?0}}"
+			+ "]}")
+    Page<GenericData> findByName(@Param("name") String name, Pageable p);
 	
-	long countByName(@Param("name") String name);
-	
+	/*
+	 * Filter collection resources access by name, number of images and depending on user
+	 */
+	@Query(" { '$and' : ["
+    		+ "{'$or':["
+    		+ "{'owner': ?#{ hasRole('admin') ? {$exists:true} : (hasRole('ANONYMOUS') ? '':principal.name)}},"
+    		+ "	{'publiclyShared':true}"
+    		+ "]} , "
+    		+ "{'name' : {$regex : '?0', $options: 'i'}}, {'numberOfImages' : {$eq : ?1}}"
+    		+ "]}")
+    Page<GenericData> findByNameContainingIgnoreCaseAndNumberOfImages(
+            @Param("name") String name,
+            @Param("numberOfImages") Integer numberOfImages,
+            Pageable p);
+
+    // Not exported
+    long countByName(@Param("name") String name);
 }

@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.nist.itl.ssd.wipp.backend.core.model.data.Data;
 import gov.nist.itl.ssd.wipp.backend.core.model.job.Job;
 import gov.nist.itl.ssd.wipp.backend.core.rest.annotation.IdExposed;
 import gov.nist.itl.ssd.wipp.backend.core.rest.annotation.ManualRef;
@@ -30,7 +31,7 @@ import gov.nist.itl.ssd.wipp.backend.core.rest.annotation.ManualRef;
 */
 @IdExposed
 @Document
-public class GenericData {
+public class GenericData extends Data{
 
 	@Id
 	private String id;
@@ -39,6 +40,8 @@ public class GenericData {
 	private String name;
 	
 	private boolean locked;
+
+	private String owner;
 	
 	private String type;
 	
@@ -64,6 +67,8 @@ public class GenericData {
 	@Indexed(unique = true, sparse = true)
 	@ManualRef(Job.class)
 	private String sourceJob;
+	
+    private boolean publiclyShared;
 	
 	public GenericData() {
 	}
@@ -94,6 +99,14 @@ public class GenericData {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 	public String getType() {
@@ -153,5 +166,12 @@ public class GenericData {
 	public int getNumberImportingGenericFiles() {
 		return numberImportingGenericFiles;
 	}
+	public boolean isPubliclyShared() {
+        return publiclyShared;
+    }
+
+    public void setPubliclyShared(boolean publiclyShared) { 
+    	this.publiclyShared = publiclyShared; 
+    }
 	
 }
